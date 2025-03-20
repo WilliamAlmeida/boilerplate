@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+table thead.text-black.dark\:text-gray-200 {
+    color: inherit;
+}
+
+
+[name=artisanPanelModal] .options-sm + div div.py-3 {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.EasyMDEContainer h1 {
+    @apply text-4xl font-bold mb-5
+}
+ 
+.EasyMDEContainer h2 {
+    @apply text-2xl font-bold mb-3
+}
+ 
+.EasyMDEContainer h3 {
+    @apply text-lg font-bold mb-3
+}
+
+/* Active page highlight */
+.mary-table-pagination span[aria-current="page"] > span {
+    @apply bg-primary text-base-100
+}
+ 
+/* For dark mode*/
+.mary-table-pagination span[aria-disabled="true"] span {
+    @apply bg-inherit
+}
+ 
+/* For dark mode*/
+.mary-table-pagination button {
+    @apply bg-base-100
+}
