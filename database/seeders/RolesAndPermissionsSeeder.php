@@ -27,7 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $arrayOfPermissionsNames = [
-            'usuarios', 'roles', 'permissions', 'clientes', 'contratos', 'financiamentos'
+            'usuarios', 'roles', 'permissions', 'clientes', 'contratos', 'financiamentos', 'vendedores'
         ];
 
         $crud = collect(['view', 'viewAny', 'create', 'edit', 'delete', 'forceDelete']);
