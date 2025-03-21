@@ -22,13 +22,19 @@ class Financiamentos extends Model
         'financiado',
         'producao',
         'vendedor',
+        'vendedor_id',
         'data',
         'obs',
     ];
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'cliente_id', 'id');
+        return $this->belongsTo(Clientes::class, 'id', 'cliente_id')->withTrashed();
+    }
+
+    public function vendedores()
+    {
+        return $this->belongsTo(Vendedores::class, 'id', 'vendedor_id')->withTrashed();
     }
 
     public function scopeSearch($query, $term)
