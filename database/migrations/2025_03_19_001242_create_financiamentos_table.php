@@ -27,6 +27,7 @@ return new class extends Migration
             $table->decimal('financiado', 15, 2);
             $table->decimal('producao', 10, 2);
             $table->string('vendedor', 100);
+            $table->foreignIdFor(\App\Models\Vendedores::class, 'vendedor_id')->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->date('data');
             $table->text('obs')->nullable();
             $table->timestamps();

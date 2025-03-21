@@ -26,6 +26,7 @@ return new class extends Migration
             $table->decimal('troco_cli', 10, 2)->nullable();
             $table->string('pos_venda', 50)->nullable();
             $table->string('vendedor', 100);
+            $table->foreignIdFor(\App\Models\Vendedores::class, 'vendedor_id')->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->date('data_inclusao');
             $table->timestamps();
             $table->softDeletes();
