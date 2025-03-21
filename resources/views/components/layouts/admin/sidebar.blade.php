@@ -27,14 +27,14 @@
             <x-menu-item title="Início" icon="o-home" link="{{ route('home') }}" />
             <x-menu-item title="Minha Conta" icon="o-user" link="{{ route('panel.account.view') }}" />
 
-            @can('orcamentos.viewAny')
-                <x-menu-item title="Orçamentos" icon="o-list-bullet" link="{{ route('panel.admin.orcamentos.index') }}" />
-            @endcan
-            @can('colaboradores.viewAny')
-                <x-menu-item title="Colaboradores" icon="o-users" link="{{ route('panel.admin.colaboradores.index') }}" />
-            @endcan
             @can('clientes.viewAny')
                 <x-menu-item title="Clientes" icon="o-user-group" link="{{ route('panel.admin.clientes.index') }}" />
+            @endcan
+            @can('contratos.viewAny')
+                <x-menu-item title="Contratos" icon="o-document-currency-dollar" link="{{ route('panel.admin.contratos.index') }}" />
+            @endcan
+            @can('financiamentos.viewAny')
+                <x-menu-item title="Financiamentos" icon="o-currency-dollar" link="{{ route('panel.admin.financiamentos.index') }}" />
             @endcan
 
             @if($user->isAdmin())
