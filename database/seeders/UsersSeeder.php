@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
         User::factory()->create([
             'name' => 'Demo',
             'type' => User::USER,
-            'email' => 'demo@agendaclinic.com',
+            'email' => 'demo@exemplo.com',
             'password' => bcrypt('demo1234'),
             'email_verified_at' => now(),
             'timezone' => 'America/Sao_Paulo',
