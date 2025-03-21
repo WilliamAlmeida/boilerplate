@@ -8,9 +8,11 @@ use App\Models\Clientes;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use App\Traits\PermissionTrait;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+#[Title('Clientes')]
 class ClientesIndex extends Component
 {
     use Toast;

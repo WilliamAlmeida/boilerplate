@@ -9,10 +9,12 @@ use App\Models\Contratos;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use App\Traits\PermissionTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+#[Title('Contratos')]
 class ContratosIndex extends Component
 {
     use Toast;

@@ -9,10 +9,12 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use App\Models\Financiamentos;
+use Livewire\Attributes\Title;
 use App\Traits\PermissionTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+#[Title('Financiamentos')]
 class FinanciamentosIndex extends Component
 {
     use Toast;
