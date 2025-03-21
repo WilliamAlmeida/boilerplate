@@ -20,6 +20,7 @@ Route::middleware(['auth'])->as('panel.')->group(function () {
         Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/dashboard', Admin\Dashboard\DashboardIndex::class)->name('dashboard');
             Route::get('/usuarios', Admin\Users\UserIndex::class)->name('accounts.index');
+            Route::get('/vendedores', Admin\Vendedores\VendedoresIndex::class)->name('vendedores.index')->middleware('permission:vendedores.viewAny');
             Route::get('/clientes', Admin\Clientes\ClientesIndex::class)->name('clientes.index')->middleware('permission:clientes.viewAny');
             Route::get('/contratos', Admin\Contratos\ContratosIndex::class)->name('contratos.index')->middleware('permission:contratos.viewAny');
             Route::get('/financiamentos', Admin\Financiamentos\FinanciamentosIndex::class)->name('financiamentos.index')->middleware('permission:financiamentos.viewAny');

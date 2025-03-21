@@ -40,6 +40,12 @@
                 <x-menu-item title="Financiamentos" icon="o-currency-dollar" link="{{ route('panel.admin.financiamentos.index') }}" />
             @endcan
 
+            <x-menu-sub title="Cadastros" icon="o-list-bullet">
+                @can('vendedores.viewAny')
+                    <x-menu-item title="Vendedores" icon="o-users" link="{{ route('panel.admin.vendedores.index') }}" />
+                @endcan
+            </x-menu-sub>
+
             @if($user->isAdmin())
                 @role('super admin|admin')
                 <x-menu-sub title="Configurações do Sistema" icon="c-cog">
