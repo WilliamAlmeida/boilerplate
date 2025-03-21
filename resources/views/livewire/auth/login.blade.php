@@ -8,7 +8,7 @@
                     <span class="font-semibold text-center">Acesso de demonstração</span>
                     <span class="text-xs">Utilize as credenciais abaixo para acessar a versão de demonstração</span>
                     <div>
-                        <div class="text-sm"><span class="font-semibold">E-mail:</span> demo@agendaclinic.com</div>
+                        <div class="text-sm"><span class="font-semibold">E-mail:</span> demo@exemplo.com</div>
                         <span class="text-sm"><span class="font-semibold">Senha:</span> demo1234</span>
                     </div>
                 </div>
