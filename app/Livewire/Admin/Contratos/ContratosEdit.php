@@ -34,7 +34,7 @@ class ContratosEdit extends Component
     #[On('edit')]
     public function edit($id)
     {
-        $this->contrato = Contratos::with('clientes')->find($id);
+        $this->contrato = Contratos::withTrashed()->with('clientes')->find($id);
 
         if(!$this->contrato) return;
 
