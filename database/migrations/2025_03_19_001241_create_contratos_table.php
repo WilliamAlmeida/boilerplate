@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('vendedor', 100);
             $table->date('data_inclusao');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
