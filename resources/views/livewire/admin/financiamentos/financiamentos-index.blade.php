@@ -7,7 +7,7 @@
         <x-slot:actions>
             <x-button label="Filtros" @click="$wire.drawer = true" responsive icon="o-funnel" class="btn-primary" />
             @if($can->create)
-                <x-button label="Novo" wire:click="$dispatch('create')" responsive icon="o-plus" class="btn-primary" />
+                {{-- <x-button label="Novo" wire:click="$dispatch('create')" responsive icon="o-plus" class="btn-primary" /> --}}
             @endif
         </x-slot:actions>
     </x-header>
@@ -43,6 +43,6 @@
         </x-slot:actions>
     </x-drawer>
 
-    <livewire:admin.financiamentos.financiamentos-create />
-    <livewire:admin.financiamentos.financiamentos-edit />
+    {{-- <livewire:admin.financiamentos.financiamentos-create /> --}}
+    {{-- <livewire:admin.financiamentos.financiamentos-edit /> --}}
 </div>
