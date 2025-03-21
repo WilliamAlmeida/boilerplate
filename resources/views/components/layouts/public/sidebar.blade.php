@@ -1,8 +1,11 @@
 <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
     {{-- BRAND --}}
     <div class="pt-3 flex justify-center items-center gap-3 select-none">
-        <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }}" class="w-auto h-16" />
-        {{-- <span class="font-bold text-lg text-red-800 dark:text-red-700 drop-shadow-sm" style="--tw-drop-shadow: drop-shadow(0 1px 1px);" x-show="!collapsed">{{ config('app.name') }}</span> --}}
+        {{-- <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }}" class="w-auto h-16" /> --}}
+        <span class="font-bold text-lg text-primary dark:text-primary drop-shadow-sm" style="--tw-drop-shadow: drop-shadow(0 1px 1px);" x-show="!collapsed">
+            <x-icon name="c-document-currency-dollar" class="w-8 h-8" />
+            {{ config('app.name') }}
+        </span>
     </div>
 
     {{-- MENU --}}
