@@ -26,7 +26,7 @@ class Financiamentos extends Model
         'obs',
     ];
 
-    public function cliente()
+    public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'cliente_id', 'id');
     }

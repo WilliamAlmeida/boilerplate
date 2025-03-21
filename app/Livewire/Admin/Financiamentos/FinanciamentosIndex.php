@@ -4,11 +4,13 @@ namespace App\Livewire\Admin\Financiamentos;
 
 use Mary\Traits\Toast;
 use Livewire\Component;
-use App\Models\Financiamentos;
+use App\Models\Clientes;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use App\Models\Financiamentos;
 use App\Traits\PermissionTrait;
+use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class FinanciamentosIndex extends Component
@@ -25,10 +27,28 @@ class FinanciamentosIndex extends Component
     public bool $drawer = false;
 
     public array $sortBy = ['column' => 'cliente', 'direction' => 'asc'];
+    
+    public array $filter = [
+        'cliente' => null,
+        'cpf' => null,
+        'banco_perfil' => null,
+        'vendedor' => null,
+        'status' => null,
+        'data_i' => null,
+        'data_e' => null,
+    ];
+
+    public Collection $clientesSearchable;
+
+    public function mount()
+    {
+        $this->searchClients();
+    }
 
     public function clear(): void
     {
         $this->reset();
+        $this->searchClients();
         $this->success('Filters cleared.', position: 'toast-bottom');
     }
 
@@ -72,6 +92,15 @@ class FinanciamentosIndex extends Component
         return Financiamentos::query()
             ->withTrashed()
             ->sortBy($this->sortBy['column'], $this->sortBy['direction'])
+            
+            ->when($this->filter['cliente'], fn ($query) => $query->where('cliente_id', $this->filter['cliente']))
+            ->when($this->filter['banco_perfil'], fn ($query) => $query->where('banco_perfil', 'like', "%{$this->filter['banco_perfil']}%"))
+            ->when($this->filter['vendedor'], fn ($query) => $query->where('vendedor', 'like', "%{$this->filter['vendedor']}%"))
+            ->when($this->filter['cpf'], fn ($query) => $query->where('cpf', 'like', "%{$this->filter['cpf']}%"))
+            ->when($this->filter['status'], fn ($query) => $query->where('status', 'like', "%{$this->filter['status']}%"))
+            ->when($this->filter['data_i'], fn ($query) => $query->where('data', '>=', $this->filter['data_i']))
+            ->when($this->filter['data_e'], fn ($query) => $query->where('data', '<=', $this->filter['data_e']))
+            
             ->when($this->search, function ($query) {
                 return $query->search($this->search);
             })
@@ -89,6 +118,23 @@ class FinanciamentosIndex extends Component
         } else {
             $this->error('Financiamento não encontrado.', position: 'toast-bottom');
         }
+    }
+    
+    public function searchClients(string $value = '')
+    {
+        // Besides the search results, you must include on demand selected option
+        $selectedOption = Clientes::select('id', 'nome_fantasia')->where('id', $this->filter['cliente'])->toBase()->get();
+
+        $this->clientesSearchable = Clientes::query()
+            ->select('id', 'nome_fantasia')
+            ->where('nome_fantasia', 'like', "%$value%")
+            ->orWhere('cpf', 'like', "%$value%")
+            ->orWhere('cnpj', 'like', "%$value%")
+            ->take(5)
+            ->orderBy('nome_fantasia')
+            ->toBase()
+            ->get()
+            ->merge($selectedOption);
     }
 
     public function render()
