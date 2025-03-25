@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('vendedores', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 100);
+            $table->foreignIdFor(\App\Models\User::class, 'user_id')->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
