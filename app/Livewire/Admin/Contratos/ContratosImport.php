@@ -4,12 +4,13 @@ namespace App\Livewire\Admin\Contratos;
 
 use Mary\Traits\Toast;
 use Livewire\Component;
+use App\Models\Clientes;
 use App\Models\Contratos;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
 use Livewire\WithFileUploads;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\ImportDatas\ImportContratosJob;
 
@@ -116,10 +117,14 @@ class ContratosImport extends Component
                     continue;
                 }
 
+                // Create or select the cliente
+                $cliente = $this->createOrSelectCliente($normalizedData);
+
                 // Map data to database fields
                 $contractData = [
                     'cpf' => $normalizedData['cpf'],
                     'cliente' => $normalizedData['cliente'],
+                    'cliente_id' => $cliente->id ?? null,
                     'pmt' => $normalizedData['pmt'],
                     'prazo' => $normalizedData['prazo'],
                     'taxa_original' => $normalizedData['taxa_original'],
@@ -156,6 +161,36 @@ class ContratosImport extends Component
             $this->importing = false;
             $this->error('Error importing file: ' . $th->getMessage(), position: 'toast-bottom');
         }
+    }
+
+    private function createOrSelectCliente(array $values)
+    {
+        $cliente = Clientes::where('nome_fantasia', $values['cliente'])->first();
+
+        if (!$cliente) {
+            $cliente = Clientes::create([
+                'tipo' => 'Físico',
+                'cpf' => $values['cpf'],
+                'nome_fantasia' => $values['cliente'],
+                'razao' => $values['cliente'],
+            ]);
+
+            if(isset($values['telefone'])) {
+                $cliente->numeros()->create([
+                    'tipo' => 'c',
+                    'numero' => $values['telefone'],
+                ]);
+            }
+
+            if(isset($values['email'])) {
+                $cliente->emails()->create([
+                    'tipo' => '',
+                    'email' => $values['email'],
+                ]);
+            }
+        }
+
+        return $cliente;
     }
 
     public function render()

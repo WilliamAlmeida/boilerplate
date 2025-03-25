@@ -1,7 +1,7 @@
 <div>
     <x-modal wire:model="myModal" title="Importação de Contratos" separator>
         @if(!$importing && !$importComplete)
-            <x-file wire:model="file" label="Arquivo" hint="Only xlsx files are allowed" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            <x-file wire:model="file" label="Arquivo" hint="Only xlsx files are allowed" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" spinner />
         @endif
 
         @if($importing)
@@ -40,9 +40,9 @@
 
         <x-slot:actions>
             @if(!$importing)
-                <x-button label="Fechar" @click="$wire.myModal = false" />
+                <x-button label="Fechar" @click="$wire.myModal = false" spinner />
                 @if(!$importComplete)
-                    <x-button label="Importar" class="btn-primary" wire:click="import" wire:loading.attr="disabled" />
+                    <x-button label="Importar" class="btn-primary" wire:click="import" wire:loading.attr="disabled" spinner />
                 @endif
             @endif
         </x-slot:actions>
