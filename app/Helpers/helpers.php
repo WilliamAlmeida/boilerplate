@@ -19,3 +19,10 @@ if (! function_exists('mask')) {
         return vsprintf(str_replace('#', '%s', $mask), str_split($string));
 	}
 }
+
+if (! function_exists('money')) {
+    function money($value, $decimals = 2, $dec_point = ',', $thousands_sep = '.')
+    {
+        return number_format($value, $decimals, $dec_point, $thousands_sep);
+    }
+}
