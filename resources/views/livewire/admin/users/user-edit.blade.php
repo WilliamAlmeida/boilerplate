@@ -3,10 +3,15 @@
     <x-drawer wire:model="showDrawer" title="{{ $form->name }}" subtitle="Registro #{{ $user?->id }}" separator with-close-button close-on-escape right
         class="w-11/12 lg:w-1/3">
         <div class="space-y-2">
-            <x-select label="Tipo de Usuário" wire:model="form.type" :options="App\Models\User::$list_type_user" option-label="label" option-value="type" :disabled="!$editmode" />
+            @can('usuarios.edit_permissions')
+                <x-select label="Tipo de Usuário" wire:model="form.type" :options="App\Models\User::$list_type_user" option-label="label" option-value="type" :disabled="!$editmode" />
+            @endcan
             <x-input label="Nome" wire:model="form.name" :readonly="!$editmode" :clearable="$editmode" />
             <x-input label="E-mail" wire:model="form.email" :readonly="!$editmode" :clearable="$editmode" />
             <x-input label="Login" wire:model="form.name" :readonly="!$editmode" :clearable="$editmode" />
+            @role('admin')
+                <x-select label="Vinculado ao Vendedor" wire:model="vendedor_id" :options="$arr_vendedores" optionLabel="nome" placeholder="Selecione um vendedor" :disabled="!$editmode" />
+            @endrole
             <div x-data="{
                 newPassword: $wire.entangle('newPassword')
             }">

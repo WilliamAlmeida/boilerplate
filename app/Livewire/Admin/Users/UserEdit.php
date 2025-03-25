@@ -11,6 +11,7 @@ use Livewire\Attributes\Locked;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use App\Livewire\Forms\Admin\FormUser;
+use App\Models\Vendedores;
 use Spatie\Permission\Models\Role;
 
 class UserEdit extends Component
@@ -33,6 +34,10 @@ class UserEdit extends Component
     #[Locked]
     public $roles = [];
 
+    public $arr_vendedores = [];
+
+    public $vendedor_id;
+
     public function mount()
     {
         // Load all roles on component mount
@@ -42,11 +47,14 @@ class UserEdit extends Component
     #[On('view')]
     public function view($id = null)
     {
-        $this->user = User::withTrashed()->with('roles')->find($id);
+        $this->user = User::withTrashed()->with('roles', 'vendedor')->find($id);
 
         if(!$this->user) return;
 
         $this->form->fill($this->user->toArray());
+
+        $this->vendedor_id = $this->user->vendedor->id ?? null;
+
         $this->reset('editmode', 'showDrawer', 'newPassword');
         $this->form->resetValidation();
         $this->showDrawer = true;
@@ -57,6 +65,9 @@ class UserEdit extends Component
     {
         $this->view($id);
         $this->editmode = true;
+
+        // Load all vendedores on component mount
+        $this->arr_vendedores = Vendedores::orderBy('nome')->get(['id', 'nome'])->toArray();
     }
 
     public function update()
@@ -76,7 +87,23 @@ class UserEdit extends Component
                 unset($data['password']);
             }
 
-            User::withTrashed()->where('id', $this->user->id)->update($data);
+            $this->user->update($data);
+
+            if($this->user->vendedor) {
+                if($this->vendedor_id) {
+                    if($this->vendedor_id != $this->user->vendedor->id) {
+                        $this->user->vendedor->update(['user_id' => null]);
+
+                        Vendedores::find($this->vendedor_id)->update(['user_id' => $this->user->id]);
+                    }
+                }else{
+                    $this->user->vendedor->update(['user_id' => null]);
+                }
+            }else{
+                if($this->vendedor_id) {
+                    Vendedores::find($this->vendedor_id)->update(['user_id' => $this->user->id]);
+                }
+            }
 
             $this->form->reset();
             $this->showDrawer = false;
