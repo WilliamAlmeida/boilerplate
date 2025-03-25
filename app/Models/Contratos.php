@@ -27,12 +27,12 @@ class Contratos extends Model
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'id', 'cliente_id')->withTrashed();
+        return $this->belongsTo(Clientes::class, 'cliente_id', 'id')->withTrashed();
     }
 
     public function vendedores()
     {
-        return $this->belongsTo(Vendedores::class, 'id', 'vendedor_id')->withTrashed();
+        return $this->belongsTo(Vendedores::class, 'vendedor_id', 'id')->withTrashed();
     }
 
     public function scopeSearch($query, $term)
