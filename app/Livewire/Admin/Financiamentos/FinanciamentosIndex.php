@@ -84,7 +84,7 @@ class FinanciamentosIndex extends Component
             ['key' => 'data', 'label' => 'Data', 'sortable' => true, 'format' => fn ($value) => $value->data ? date('d/m/Y', strtotime($value->data)) : ''],
             ['key' => 'created_at', 'label' => 'Registrado em', 'format' => fn ($value) => $value->created_at->format('d/m/Y - H:i')],
             ['key' => 'updated_at', 'label' => 'Atualizado em', 'format' => fn ($value) => $value->updated_at->diffForHumans()],
-            ['key' => 'deleted_at', 'label' => 'Status', 'hidden' => !$this->permissions(['delete'])->delete],
+            ['key' => 'deleted_at', 'label' => 'Ativo', 'hidden' => !$this->permissions(['delete'])->delete],
         ];
     }
 

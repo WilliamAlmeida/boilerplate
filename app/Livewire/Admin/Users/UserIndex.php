@@ -61,7 +61,7 @@ class UserIndex extends Component
             ['key' => 'roles', 'label' => 'Funções', 'sortable' => false],
             ['key' => 'created_at', 'label' => 'Registrado em', 'format' => fn ($value) => $value->created_at->format('d/m/Y - H:i')],
             ['key' => 'updated_at', 'label' => 'Atualizado em', 'format' => fn ($value) => $value->updated_at->diffForHumans()],
-            ['key' => 'deleted_at', 'label' => 'Status', 'hidden' => !$this->permissions(['delete'])->delete],
+            ['key' => 'deleted_at', 'label' => 'Ativo', 'hidden' => !$this->permissions(['delete'])->delete],
         ];
     }
 
