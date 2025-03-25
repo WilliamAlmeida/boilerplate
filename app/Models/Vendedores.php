@@ -18,11 +18,6 @@ class Vendedores extends Model
         return $this->hasMany(Contratos::class, 'vendedor_id', 'id');
     }
 
-    public function financiamentos()
-    {
-        return $this->hasMany(Financiamentos::class, 'vendedor_id', 'id');
-    }
-
     public function scopeSearch($query, $term)
     {
         return $query->where('nome', 'like', "%{$term}%");

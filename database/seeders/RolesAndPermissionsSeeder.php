@@ -27,7 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $arrayOfPermissionsNames = [
-            'usuarios', 'roles', 'permissions', 'clientes', 'contratos', 'financiamentos', 'vendedores'
+            'usuarios', 'roles', 'permissions', 'clientes', 'contratos', 'vendedores'
         ];
 
         $crud = collect(['view', 'viewAny', 'create', 'edit', 'delete', 'forceDelete']);
@@ -53,7 +53,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         unset($arrayOfPermissionsNames, $permissions);
 
-        $arrayOfRolesNames = ['super admin', 'admin', 'manager', 'operator'];
+        $arrayOfRolesNames = ['super admin', 'admin', 'gerente', 'vendedor'];
         $roles = collect($arrayOfRolesNames)->map(function ($role) {
             return ['name' => $role, 'guard_name' => 'web'];
         });
@@ -67,9 +67,9 @@ class RolesAndPermissionsSeeder extends Seeder
         $usuario = User::whereType(User::ADMIN)->firstOrFail();
         $usuario->syncRoles($role);
 
-        /* operator */
-            $permissions = ['usuarios','clientes'];
-            $role = Role::findByName('operator');
+        /* vendedor */
+            $permissions = ['clientes','contratos'];
+            $role = Role::findByName('vendedor');
             $results = Permission::where(function ($query) use ($permissions) {
                 foreach ($permissions as $value) {
                     $query->orWhere('name', 'like', $value . '%');
@@ -84,11 +84,11 @@ class RolesAndPermissionsSeeder extends Seeder
             })->collapse()->all();
             $role->revokePermissionTo($permissions_to_revoke);
             $role->revokePermissionTo(['usuarios.forceDelete', 'usuarios.delete', 'usuarios.edit_permissions', 'usuarios.create', 'usuarios.edit']);
-        /* operator */
+        /* vendedor */
 
-        /* manager */
+        /* gerente */
             $permissions = ['usuarios','clientes'];
-            $role = Role::findByName('manager');
+            $role = Role::findByName('gerente');
             $results = Permission::where(function ($query) use ($permissions) {
                 foreach ($permissions as $value) {
                     $query->orWhere('name', 'like', $value . '%');
@@ -97,6 +97,6 @@ class RolesAndPermissionsSeeder extends Seeder
             $role->givePermissionTo($results);
             // $role->revokePermissionTo($results_regions);
             $role->revokePermissionTo(['usuarios.forceDelete', 'usuarios.delete', 'usuarios.edit_permissions', 'usuarios.create', 'usuarios.edit']);
-        /* manager */
+        /* gerente */
     }
 }

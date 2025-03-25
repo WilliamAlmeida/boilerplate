@@ -47,11 +47,6 @@ class Clientes extends Model
         return $this->hasMany(Contratos::class, 'cliente_id', 'id');
     }
 
-    public function financiamentos()
-    {
-        return $this->hasMany(Financiamentos::class, 'cliente_id', 'id');
-    }
-
     public function scopeSearch($query, $term)
     {
         return $query->where('nome_fantasia', 'like', "%{$term}%")->orWhere('cnpj', 'like', "%{$term}%")->orWhere('cpf', 'like', "%{$term}%");

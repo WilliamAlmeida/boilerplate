@@ -6,9 +6,12 @@ use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Contratos;
+use App\Models\Vendedores;
+use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
 use Livewire\WithFileUploads;
+use App\Enums\EnumContratoStatus;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +33,13 @@ class ContratosImport extends Component
     public $currentRow = 0;
     public $errors = [];
     public $importComplete = false;
+
+    public $arr_status = [];
+
+    public function mount()
+    {
+        $this->arr_status = collect(EnumContratoStatus::cases())->mapWithKeys(fn($item) => [$item->value => $item->name]);
+    }
 
     #[On('import')]
     public function open()
@@ -120,24 +130,38 @@ class ContratosImport extends Component
                 // Create or select the cliente
                 $cliente = $this->createOrSelectCliente($normalizedData);
 
+                // Create or select the vendedor
+                $vendedor = $this->createOrSelectVendedor($normalizedData);
+
+                try {
+                    $status = EnumContratoStatus::from(Str::of($normalizedData['status'])->lower()->slug('-')->__toString())->value;
+                } catch (\Throwable $th) {
+                    $status = null;
+                }
+
                 // Map data to database fields
                 $contractData = [
                     'cpf' => $normalizedData['cpf'],
                     'cliente' => $normalizedData['cliente'],
                     'cliente_id' => $cliente->id ?? null,
-                    'pmt' => $normalizedData['pmt'],
-                    'prazo' => $normalizedData['prazo'],
-                    'taxa_original' => $normalizedData['taxa_original'],
-                    'saldo_devedor' => $normalizedData['saldo_devedor'],
+                    'pmt' => floatval($normalizedData['pmt']),
+                    'prazo' => intval($normalizedData['prazo']),
+                    'taxa_original' => floatval($normalizedData['taxa_original']),
+                    'saldo_devedor' => floatval($normalizedData['saldo_devedor']),
                     'telefone' => $normalizedData['telefone'] ?? null,
-                    'banco' => $normalizedData['banco'] ?? null,
                     'obs_1' => $normalizedData['obs_1'] ?? null,
                     'obs_2' => $normalizedData['obs_2'] ?? null,
-                    'status' => $normalizedData['status'] ?? null,
-                    'producao' => $normalizedData['producao'] ?? 0,
-                    'troco_cli' => $normalizedData['troco_cli'] ?? 0,
+                    'status' => $status,
+                    'producao' => floatval($normalizedData['producao'] ?? 0),
+                    'troco_cli' => floatval($normalizedData['troco_cli'] ?? 0),
                     'pos_venda' => $normalizedData['pos_venda'] ?? null,
                     'vendedor' => $normalizedData['vendedor'] ?? null,
+                    'vendedor_id' => $vendedor->id ?? null,
+                    'banco_perfil' => $normalizedData['banco'] ?? null,
+                    'produto' => $normalizedData['produto'] ?? null,
+                    'tabela' => $normalizedData['tabela'] ?? null,
+                    'financiado' => $normalizedData['financiado'] ?? null,
+                    // 'data_inclusao' => $normalizedData['data_inclusao'] ?? null,
                     'data_inclusao' => now(),
                 ];
 
@@ -159,6 +183,7 @@ class ContratosImport extends Component
 
         } catch (\Throwable $th) {
             $this->importing = false;
+            throw $th;
             $this->error('Error importing file: ' . $th->getMessage(), position: 'toast-bottom');
         }
     }
@@ -191,6 +216,19 @@ class ContratosImport extends Component
         }
 
         return $cliente;
+    }
+
+    private function createOrSelectVendedor(array $values)
+    {
+        $vendedor = Vendedores::where('nome', $values['vendedor'])->first();
+
+        if (!$vendedor) {
+            $vendedor = Vendedores::create([
+                'nome' => $values['vendedor'],
+            ]);
+        }
+
+        return $vendedor;
     }
 
     public function render()

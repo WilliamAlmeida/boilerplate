@@ -23,7 +23,6 @@ Route::middleware(['auth'])->as('panel.')->group(function () {
             Route::get('/vendedores', Admin\Vendedores\VendedoresIndex::class)->name('vendedores.index')->middleware('permission:vendedores.viewAny');
             Route::get('/clientes', Admin\Clientes\ClientesIndex::class)->name('clientes.index')->middleware('permission:clientes.viewAny');
             Route::get('/contratos', Admin\Contratos\ContratosIndex::class)->name('contratos.index')->middleware('permission:contratos.viewAny');
-            Route::get('/financiamentos', Admin\Financiamentos\FinanciamentosIndex::class)->name('financiamentos.index')->middleware('permission:financiamentos.viewAny');
             
             Route::get('/roles', Admin\Roles\RoleIndex::class)->name('roles.index')->middleware('permission:roles.viewAny');
             Route::get('/permissions', Admin\Permissions\PermissionIndex::class)->name('permissions.index')->middleware('permission:permissions.viewAny');

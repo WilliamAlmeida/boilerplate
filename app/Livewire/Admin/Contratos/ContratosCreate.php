@@ -6,7 +6,9 @@ use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Contratos;
+use App\Models\Vendedores;
 use Livewire\Attributes\On;
+use App\Enums\EnumContratoStatus;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use App\Livewire\Forms\Admin\FormContrato;
@@ -18,14 +20,20 @@ class ContratosCreate extends Component
     public bool $showDrawer = false;
     public FormContrato $form;
 
-    public $selectedTab = 'info-tab';
+    public $selectedTab = 'cliente-tab';
 
     public Collection $clientesSearchable;
 
     public ?Clientes $cliente;
 
+    public $arr_status = [];
+    public $arr_vendedores = [];
+
     public function mount()
     {
+        $this->arr_status = collect(EnumContratoStatus::cases())->map(fn($item) => ['id' => $item->value, 'name' => $item->label(),])->toArray();
+        $this->arr_vendedores = Vendedores::select('id', 'nome')->get();
+
         $this->searchClients();
     }
 
@@ -41,6 +49,14 @@ class ContratosCreate extends Component
 
     public function save()
     {
+        if($this->form->vendedor_id) {
+            $vendedor = Vendedores::find($this->form->vendedor_id);
+
+            $this->form->vendedor = $vendedor->nome;
+        }else{
+            $this->form->vendedor = null;
+        }
+
         $this->form->validate();
 
         DB::beginTransaction();
@@ -81,15 +97,18 @@ class ContratosCreate extends Component
 
     public function updatedFormClienteId($value)
     {
-        $this->cliente = Clientes::find($value);
+        $this->cliente = Clientes::with([
+            'numeros' => fn($query) => $query->take(1),
+        ])->find($value);
 
         if ($this->cliente) {
             $this->form->fill([
                 'cliente' => $this->cliente->nome_fantasia,
                 'cpf' => $this->cliente->cpf,
+                'telefone' => $this->cliente->numeros->first()->numero,
             ]);
         }else{
-            $this->form->reset(['cliente', 'cpf']);
+            $this->form->reset(['cliente', 'cpf', 'telefone']);
         }
     }
 

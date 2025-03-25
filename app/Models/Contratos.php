@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnumContratoStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,7 +24,23 @@ class Contratos extends Model
         'vendedor',
         'vendedor_id',
         'data_inclusao',
+        'telefone',
+        'banco_perfil',
+        'produto',
+        'tabela',
+        'status',
+        'financiado',
+        'producao',
+        'obs_1',
+        'obs_2'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status' => EnumContratoStatus::class
+        ];
+    }
 
     public function clientes()
     {
@@ -39,6 +56,7 @@ class Contratos extends Model
     {
         return $query->where('cliente', 'like', "%{$term}%")
                     ->orWhere('cpf', 'like', "%{$term}%")
+                    ->orWhere('banco_perfil', 'like', "%{$term}%")
                     ->orWhere('vendedor', 'like', "%{$term}%");
     }
 

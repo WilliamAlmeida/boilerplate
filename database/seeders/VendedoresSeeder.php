@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Vendedores;
+use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
 
 class VendedoresSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class VendedoresSeeder extends Seeder
 
         foreach ($vendedores as $vendedor) {
             Vendedores::create([
-                'nome' => $vendedor,
+                'nome' => Str::upper($vendedor),
             ]);
         }
     }

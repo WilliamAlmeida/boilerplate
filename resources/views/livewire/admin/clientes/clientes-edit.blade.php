@@ -48,6 +48,7 @@
                     </div>
                 </x-tab>
             </x-tabs>
+            <x-errors title="Oops!" description="Please, fix them." icon="o-face-frown" />
         </div>
 
         <x-slot:actions>

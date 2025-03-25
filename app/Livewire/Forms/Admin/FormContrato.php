@@ -3,39 +3,70 @@
 namespace App\Livewire\Forms\Admin;
 
 use Livewire\Form;
+use Livewire\Attributes\Validate;
 
 class FormContrato extends Form
 {
-    public $cliente_id = null;
-    public $cliente = '';
-    public $cpf = '';
+    #[Validate('required|string|max:14')]
+    public ?string $cpf = '';
 
-    public $pmt = 0;
-    public $prazo = 0;
-    public $taxa_original = 0;
-    public $saldo_devedor = 0;
-    public $producao = 0;
-    public $troco_cli = 0;
-    public $pos_venda = '';
+    #[Validate('required|string|max:100')]
+    public ?string $cliente = '';
 
-    public $vendedor = '';
-    public $data_inclusao = '';
+    #[Validate('nullable|exists:clientes,id')]
+    public ?string $cliente_id = null;
 
-    public function rules()
-    {
-        return [
-            'cpf' => ['required', 'string', 'max:14'],
-            'cliente' => ['required', 'string', 'max:100'],
-            'cliente_id' => ['nullable', 'exists:clientes,id'],
-            'pmt' => ['required', 'numeric', 'min:0'],
-            'prazo' => ['required', 'integer', 'min:1'],
-            'taxa_original' => ['required', 'numeric', 'min:0'],
-            'saldo_devedor' => ['required', 'numeric', 'min:0'],
-            'producao' => ['required', 'numeric', 'min:0'],
-            'troco_cli' => ['nullable', 'numeric', 'min:0'],
-            'pos_venda' => ['nullable', 'string', 'max:50'],
-            'vendedor' => ['required', 'string', 'max:100'],
-            'data_inclusao' => ['required', 'date'],
-        ];
-    }
+    #[Validate('required|numeric|min:0')]
+    public ?int $pmt = 0;
+
+    #[Validate('required|integer|min:1')]
+    public ?int $prazo = 0;
+
+    #[Validate('required|numeric|min:0')]
+    public ?int $taxa_original = 0;
+
+    #[Validate('required|numeric|min:0')]
+    public ?float $saldo_devedor = 0;
+
+    #[Validate('required|numeric|min:0')]
+    public ?float $producao = 0;
+
+    #[Validate('nullable|numeric|min:0')]
+    public ?float $troco_cli = 0;
+
+    #[Validate('nullable|string|max:50')]
+    public ?string $pos_venda = '';
+
+    #[Validate('required|string|max:100')]
+    public ?string $vendedor = '';
+
+    #[Validate('nullable|exists:vendedores,id')]
+    public ?int $vendedor_id = null;
+
+    #[Validate('required|date')]
+    public ?string $data_inclusao = '';
+
+    #[Validate('nullable|string|max:20')]
+    public ?string $telefone = null;
+
+    #[Validate('required|string|max:50', message: 'O banco/perfil é obrigatório')]
+    public ?string $banco_perfil = null;
+
+    #[Validate('nullable|string|max:50')]
+    public ?string $produto = null;
+
+    #[Validate('nullable|numeric|min:0')]
+    public ?float $tabela = null;
+
+    #[Validate('required|string')]
+    public ?string $status = null;
+
+    #[Validate('nullable|numeric|min:0')]
+    public ?float $financiado = null;
+
+    #[Validate('nullable|string|max:255')]
+    public ?string $obs_1 = null;
+
+    #[Validate('nullable|string|max:255')]
+    public ?string $obs_2 = null;
 }

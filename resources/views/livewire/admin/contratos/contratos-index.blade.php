@@ -16,6 +16,21 @@
     <!-- TABLE  -->
     <x-card>
         <x-table :headers="$headers" :rows="$contratos" :sort-by="$sortBy" with-pagination per-page="perPage" :per-page-values="[20, 50, 100]">
+            @scope('cell_cliente', $data)
+                <div class="font-semibold">
+                    {{ $data->cliente }}
+                </div>
+                <div class="text-xs italic">
+                    CPF: {{ $data->cpf }}
+                </div>
+            @endscope
+            @scope('cell_status', $data)
+                @if(!$data->status)
+                    <x-badge value="N/A" class="badge-error" />
+                @else
+                    <x-badge :value="$data->status->label()" class="badge-warning" />
+                @endif
+            @endscope
             @scope('cell_deleted_at', $data)
                 <x-btn-toggle-deleted_at :data="$data" />
             @endscope
@@ -43,6 +58,14 @@
                 <x-input label="Vendedor" wire:model="filter.vendedor" clearable />
                 <x-input label="CPF" wire:model="filter.cpf" x-mask="999.999.999-99" clearable />
             </div>
+
+            <x-choices-offline
+                label="Status do Contrato" 
+                wire:model="filter.status" 
+                :options="$arr_status_filter" 
+                placeholder="Selecione um status" 
+                searchable
+            />
 
             <div class="flex flex-col">
                 <x-mary.label label="Data da Inclusão" class="font-semibold" />
