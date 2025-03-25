@@ -11,7 +11,13 @@ class Vendedores extends Model
 
     protected $fillable = [
         'nome',
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
+    }
 
     public function contratos()
     {
