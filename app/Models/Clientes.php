@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\ArrayString;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ class Clientes extends BaseModel
     use HasFactory, SoftDeletes, HasUuids;
 
     protected $table = 'clientes';
+    protected $connection = 'supabase';
 
     protected $fillable = [
         'nome',
@@ -26,7 +28,7 @@ class Clientes extends BaseModel
     protected $casts = [
         'data_cadastro' => 'datetime',
         'data_nascimento' => 'date',
-        'tags_personalidade' => 'array',
+        'tags_personalidade' => ArrayString::class,
     ];
 
     public function scopeSearch($query, $term)
