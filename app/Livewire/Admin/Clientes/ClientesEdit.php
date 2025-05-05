@@ -49,7 +49,11 @@ class ClientesEdit extends Component
         ]);
 
         try {
-            $this->cliente->update($this->form->all());
+            $data = $this->form->all();
+
+            if(empty($this->form->tags_personalidade)) $data['tags_personalidade'] = null;
+
+            $this->cliente->update($data);
 
             $this->form->reset();
             $this->showDrawer2 = false;

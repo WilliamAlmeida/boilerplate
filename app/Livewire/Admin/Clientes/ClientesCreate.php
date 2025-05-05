@@ -6,7 +6,6 @@ use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Clientes;
 use Livewire\Attributes\On;
-use App\Enums\EnumTipoCliente;
 use App\Livewire\Forms\Admin\FormCliente;
 
 class ClientesCreate extends Component
@@ -42,10 +41,6 @@ class ClientesCreate extends Component
     {
         $this->form->validate([
             'nome' => ['required', 'min:3', 'max:255'],
-            'nome_fantasia' => ['nullable', 'min:3', 'max:255', 'unique:clientes,nome_fantasia'],
-            'tipo' => ['required', 'in:' . implode(',', array_keys(EnumTipoCliente::labels()))],
-            'cpf' => ['nullable', 'min:14', 'max:14', 'unique:clientes,cpf', 'required_if:tipo,' . EnumTipoCliente::FISICO->value],
-            'cnpj' => ['nullable', 'min:18', 'max:18', 'unique:clientes,cnpj', 'required_if:tipo,' . EnumTipoCliente::JURIDICO->value],
             'email' => ['nullable', 'email', 'max:255'],
             'data_nascimento' => ['nullable', 'date'],
             'phone_1' => ['nullable', 'max:20'],
@@ -59,7 +54,11 @@ class ClientesCreate extends Component
         ]);
 
         try {
-            Clientes::create($this->form->all());
+            $data = $this->form->all();
+
+            if(empty($this->form->tags_personalidade)) $data['tags_personalidade'] = null;
+
+            Clientes::create($data);
             
             $this->form->reset();
             $this->showDrawer = false;
