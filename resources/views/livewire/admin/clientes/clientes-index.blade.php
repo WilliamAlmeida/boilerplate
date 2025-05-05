@@ -21,7 +21,7 @@
             @scope('actions', $data, $can)
             <div class="flex items-center space-x-2">
                 @if($can->edit || $can->view)
-                    <x-button icon="o-pencil" wire:click="$dispatch('edit', { id: {{ $data->id }} })" spinner class="btn-ghost btn-sm text-blue-500" />
+                    <x-button icon="o-pencil" wire:click="$dispatch('edit', { id: '{{ $data->id }}' })" spinner class="btn-ghost btn-sm text-blue-500" />
                 @endif
                 @if($can->forceDelete)
                     <x-btn-delete :data="$data" />

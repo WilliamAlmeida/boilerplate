@@ -4,9 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Clientes;
-use App\Models\ClientesEmails;
-use App\Models\ClientesNumeros;
-use Carbon\Carbon;
 
 class ClientesSeeder extends Seeder
 {
@@ -19,30 +16,26 @@ class ClientesSeeder extends Seeder
     {
         Clientes::query()->forceDelete();
 
-        // Create the client
         $client = Clientes::create([
-            'tipo' => 'Físico',
-            'nome_fantasia' => 'William',
-            'cpf' => '417.544.948-54',
-            'cnpj' => null,
-            'razao' => 'William',
-            'estado_id' => 26,
-            'cidade_id' => 5114,
-            'cep' => '12.610-185',
-            'endereco' => 'Rua Professora Therezinha De P Ferrari Andrade',
-            'bairro' => 'Vila Dos Comerciários Ii',
-        ]);
-
-        // Create an email for the client
-        $client->emails()->create([
-            'tipo' => 'pessoal',
+            'nome' => 'William',
+            'data_cadastro' => now(),
+            'tags_personalidade' => ['calmo', 'detalhista'],
+            'data_nascimento' => '1990-01-15',
             'email' => 'william@example.com',
+            'phone_1' => '(12) 99999-8888',
+            'phone_2' => '(12) 3333-4444',
+            'phone_3' => null,
         ]);
 
-        // Create a phone number for the client
-        $client->numeros()->create([
-            'tipo' => 'celular',
-            'numero' => '(12) 99999-8888',
+        $client2 = Clientes::create([
+            'nome' => 'Farmácia Modelo',
+            'data_cadastro' => now(),
+            'tags_personalidade' => ['objetivo', 'economico'],
+            'data_nascimento' => null,
+            'email' => 'contato@farmaciamodelo.com.br',
+            'phone_1' => '(12) 98765-4321',
+            'phone_2' => '(12) 3456-7890',
+            'phone_3' => '(12) 3456-7891',
         ]);
     }
 }

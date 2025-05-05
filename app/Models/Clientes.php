@@ -2,49 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Clientes extends Model
+class Clientes extends BaseModel
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuids;
+
+    protected $table = 'clientes';
 
     protected $fillable = [
-    	'tipo',
-        'nome_fantasia',
-        'cpf',
-        'cnpj',
-        'razao',
-        'estado_id',
-        'cidade_id',
-        'cep',
-        'endereco',
-        'bairro',
+        'nome',
+        'data_cadastro',
+        'tags_personalidade',
+        'data_nascimento',
+        'email',
+        'phone_1',
+        'phone_2',
+        'phone_3',
     ];
 
-    public function estado()
-    {
-        return $this->hasOne(Estados::class, 'id', 'estado_id');
-    }
-
-    public function cidade()
-    {
-        return $this->hasOne(Cidades::class, 'id', 'cidade_id');
-    }
-
-    public function emails()
-    {
-        return $this->hasMany(ClientesEmails::class, 'cliente_id', 'id');
-    }
-
-    public function numeros()
-    {
-        return $this->hasMany(ClientesNumeros::class, 'cliente_id', 'id');
-    }
+    protected $casts = [
+        'data_cadastro' => 'datetime',
+        'data_nascimento' => 'date',
+        'tags_personalidade' => 'array',
+    ];
 
     public function scopeSearch($query, $term)
     {
-        return $query->where('nome_fantasia', 'like', "%{$term}%")->orWhere('cnpj', 'like', "%{$term}%")->orWhere('cpf', 'like', "%{$term}%");
+        return $query->where('nome', 'like', "%{$term}%")->orWhere('email', 'like', "%{$term}%");
     }
 
     public function scopeSortBy($query, $field, $direction = 'asc')

@@ -26,7 +26,7 @@ class ClientesIndex extends Component
 
     public bool $drawer = false;
 
-    public array $sortBy = ['column' => 'nome_fantasia', 'direction' => 'asc'];
+    public array $sortBy = ['column' => 'nome', 'direction' => 'asc'];
 
     public function clear(): void
     {
@@ -53,12 +53,12 @@ class ClientesIndex extends Component
     {
         return [
             ['key' => 'id', 'label' => 'ID'],
-            ['key' => 'nome_fantasia', 'label' => 'Nome Fantasia', 'format' => fn ($value) => Str::limit($value->nome_fantasia, 50)],
-            ['key' => 'cpf_cnpj', 'label' => 'CPF / CNPJ', 'sortable' => false, 'format' => fn ($value) => $value->cpf ?? $value->cnpj],
-            ['key' => 'tipo', 'label' => 'Tipo'],
-            ['key' => 'cidade.nome', 'label' => 'Cidade / Estado', 'sortable' => false, 'format' => fn ($value) => $value->cidade?->nome . ' - ' . $value->estado?->uf],
-            ['key' => 'created_at', 'label' => 'Registrado em', 'format' => fn ($value) => $value->created_at->format('d/m/Y - H:i')],
-            ['key' => 'updated_at', 'label' => 'Atualizado em', 'format' => fn ($value) => $value->updated_at->diffForHumans()],
+            ['key' => 'nome', 'label' => 'Nome', 'format' => fn ($value) => Str::limit($value->nome, 50)],
+            ['key' => 'email', 'label' => 'E-mail', 'format' => fn ($value) => Str::limit($value->email, 50)],
+            ['key' => 'phone_1', 'label' => 'Celular', 'format' => fn ($value) => $value->phone_1],
+            ['key' => 'data_nascimento', 'label' => 'Data Nascimento', 'format' => fn ($value) => $value->data_nascimento ? $value->data_nascimento->format('d/m/Y') : ''],
+            ['key' => 'data_cadastro', 'label' => 'Registrado em', 'format' => fn ($value) => $value->data_cadastro ? $value->data_cadastro->format('d/m/Y - H:i') : ''],
+            ['key' => 'updated_at', 'label' => 'Atualizado em', 'format' => fn ($value) => $value->updated_at ? $value->updated_at->diffForHumans() : ''],
             ['key' => 'deleted_at', 'label' => 'Ativo', 'hidden' => !$this->permissions(['delete'])->delete],
         ];
     }
@@ -70,7 +70,9 @@ class ClientesIndex extends Component
             ->withTrashed()
             ->sortBy($this->sortBy['column'], $this->sortBy['direction'])
             ->when($this->search, function ($query) {
-                return $query->where('nome_fantasia', 'like', "%{$this->search}%")->orWhere('cnpj', 'like', "%{$this->search}%")->orWhere('cpf', 'like', "%{$this->search}%");
+                return $query->where('nome', 'like', "%{$this->search}%")
+                    ->orWhere('email', 'like', "%{$this->search}%")
+                    ->orWhere('phone_1', 'like', "%{$this->search}%");
             })
             ->paginate($this->perPage);
     }
