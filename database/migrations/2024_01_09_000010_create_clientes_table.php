@@ -25,17 +25,6 @@ return new class extends Migration
             $table->string('cep', 45)->nullable();
             $table->string('endereco', 200)->nullable();
             $table->string('bairro', 200)->nullable();
-
-            $table->decimal('pmt', 10, 2)->nullable()->comment('Parcela Mensal');
-            $table->integer('prazo')->nullable()->comment('Prazo em meses');
-            $table->decimal('taxa_original', 8, 4)->nullable()->comment('Taxa Original');
-            $table->decimal('saldo_devedor', 15, 2)->nullable();
-            $table->decimal('producao', 15, 2)->nullable();
-            $table->decimal('troco_cli', 15, 2)->nullable();
-            $table->string('pos_venda')->nullable();
-            $table->string('vendedor')->nullable();
-            $table->timestamp('data_inclusao')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

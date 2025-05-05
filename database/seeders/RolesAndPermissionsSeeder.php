@@ -27,7 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $arrayOfPermissionsNames = [
-            'usuarios', 'roles', 'permissions', 'clientes', 'contratos', 'vendedores'
+            'usuarios', 'roles', 'permissions', 'clientes'
         ];
 
         $crud = collect(['view', 'viewAny', 'create', 'edit', 'delete', 'forceDelete']);
@@ -53,7 +53,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         unset($arrayOfPermissionsNames, $permissions);
 
-        $arrayOfRolesNames = ['super admin', 'admin', 'gerente', 'vendedor'];
+        $arrayOfRolesNames = ['super admin', 'admin'];
         $roles = collect($arrayOfRolesNames)->map(function ($role) {
             return ['name' => $role, 'guard_name' => 'web'];
         });
@@ -66,37 +66,5 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $usuario = User::whereType(User::ADMIN)->firstOrFail();
         $usuario->syncRoles($role);
-
-        /* vendedor */
-            $permissions = ['clientes','contratos'];
-            $role = Role::findByName('vendedor');
-            $results = Permission::where(function ($query) use ($permissions) {
-                foreach ($permissions as $value) {
-                    $query->orWhere('name', 'like', $value . '%');
-                }
-            })->get();
-            $role->givePermissionTo($results);
-            // $role->revokePermissionTo($results_regions);
-            $permissions_to_revoke = collect($permissions)->map(function ($permission) {
-                return collect(['delete', 'forceDelete'])->map(function ($item) use ($permission) {
-                    return "{$permission}.{$item}";
-                });
-            })->collapse()->all();
-            $role->revokePermissionTo($permissions_to_revoke);
-            $role->revokePermissionTo(['usuarios.forceDelete', 'usuarios.delete', 'usuarios.edit_permissions', 'usuarios.create', 'usuarios.edit']);
-        /* vendedor */
-
-        /* gerente */
-            $permissions = ['usuarios','clientes'];
-            $role = Role::findByName('gerente');
-            $results = Permission::where(function ($query) use ($permissions) {
-                foreach ($permissions as $value) {
-                    $query->orWhere('name', 'like', $value . '%');
-                }
-            })->get();
-            $role->givePermissionTo($results);
-            // $role->revokePermissionTo($results_regions);
-            $role->revokePermissionTo(['usuarios.forceDelete', 'usuarios.delete', 'usuarios.edit_permissions', 'usuarios.create', 'usuarios.edit']);
-        /* gerente */
     }
 }

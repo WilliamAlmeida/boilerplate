@@ -2,8 +2,8 @@
     {{-- BRAND --}}
     <div class="pt-3 flex justify-center items-center gap-3 select-none">
         {{-- <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }}" class="w-auto h-16" /> --}}
-        <span class="font-bold text-lg text-primary dark:text-primary drop-shadow-sm" style="--tw-drop-shadow: drop-shadow(0 1px 1px);" x-show="!collapsed">
-            <x-icon name="c-document-currency-dollar" class="w-8 h-8" />
+        <span class="font-bold text-lg text-primary dark:text-primary" style="--tw-drop-shadow: drop-shadow(0 1px 1px);" x-show="!collapsed">
+            {{-- <x-icon name="c-document-currency-dollar" class="w-8 h-8" /> --}}
             {{ config('app.name') }}
         </span>
     </div>
@@ -30,16 +30,9 @@
             <x-menu-item title="Início" icon="o-home" link="{{ route('home') }}" />
             <x-menu-item title="Minha Conta" icon="o-user" link="{{ route('panel.account.view') }}" />
 
-            @can('contratos.viewAny')
-                <x-menu-item title="Contratos" icon="o-document-currency-dollar" link="{{ route('panel.admin.contratos.index') }}" />
-            @endcan
-
             <x-menu-sub title="Cadastros" icon="o-list-bullet">
                 @can('clientes.viewAny')
                     <x-menu-item title="Clientes" icon="o-user-group" link="{{ route('panel.admin.clientes.index') }}" />
-                @endcan
-                @can('vendedores.viewAny')
-                    <x-menu-item title="Vendedores" icon="o-users" link="{{ route('panel.admin.vendedores.index') }}" />
                 @endcan
             </x-menu-sub>
 

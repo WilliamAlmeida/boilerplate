@@ -118,9 +118,4 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return false;
     }
-
-    public function vendedor()
-    {
-        return $this->hasOne(Vendedores::class, 'user_id', 'id')->withTrashed();
-    }
 }
