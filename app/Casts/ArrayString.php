@@ -19,7 +19,7 @@ class ArrayString implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): ?array
     {
         if (is_null($value)) {
-            return null;
+            return [];
         }
         
         // Remove the curly braces and explode the string by comma
